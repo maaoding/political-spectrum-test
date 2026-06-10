@@ -1,0 +1,1110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>中文政治光谱卡片测试</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #070914;
+        --panel: rgba(18, 25, 47, 0.72);
+        --panel-strong: rgba(26, 35, 64, 0.9);
+        --border: rgba(167, 196, 255, 0.18);
+        --text: #eef4ff;
+        --muted: #9da9c5;
+        --soft: #cbd6ee;
+        --primary: #78f0ff;
+        --secondary: #b178ff;
+        --accent: #ffcf70;
+        --danger: #ff7d9c;
+        --ok: #80ffb7;
+        --shadow: 0 22px 90px rgba(0, 0, 0, 0.48);
+        --radius: 28px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+        background:
+          radial-gradient(circle at 20% 10%, rgba(120, 240, 255, 0.24), transparent 34rem),
+          radial-gradient(circle at 88% 6%, rgba(177, 120, 255, 0.25), transparent 30rem),
+          radial-gradient(circle at 58% 92%, rgba(255, 207, 112, 0.12), transparent 34rem),
+          linear-gradient(135deg, #070914 0%, #11162b 52%, #080a16 100%);
+        overflow-x: hidden;
+      }
+
+      body::before {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        content: "";
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 64px 64px;
+        mask-image: radial-gradient(circle at top, black 0%, transparent 72%);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        border: 0;
+      }
+
+      .shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 56px 0 72px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+        gap: 28px;
+        align-items: stretch;
+      }
+
+      .glass {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035)),
+          var(--panel);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(22px);
+      }
+
+      .hero-card {
+        position: relative;
+        overflow: hidden;
+        padding: 42px;
+      }
+
+      .hero-card::after {
+        position: absolute;
+        right: -76px;
+        bottom: -100px;
+        width: 280px;
+        height: 280px;
+        content: "";
+        border-radius: 999px;
+        background: radial-gradient(circle, rgba(120, 240, 255, 0.22), transparent 68%);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        margin: 0 0 18px;
+        padding: 8px 12px;
+        color: var(--primary);
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border: 1px solid rgba(120, 240, 255, 0.28);
+        border-radius: 999px;
+        background: rgba(120, 240, 255, 0.08);
+      }
+
+      h1 {
+        max-width: 760px;
+        margin: 0;
+        font-size: clamp(42px, 7vw, 84px);
+        line-height: 0.95;
+        letter-spacing: -0.075em;
+      }
+
+      .gradient-text {
+        color: transparent;
+        background: linear-gradient(100deg, #ffffff 0%, #78f0ff 38%, #b178ff 72%, #ffcf70 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+      }
+
+      .lead {
+        max-width: 700px;
+        margin: 22px 0 0;
+        color: var(--soft);
+        font-size: clamp(17px, 2vw, 21px);
+        line-height: 1.75;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+        margin-top: 30px;
+      }
+
+      .button {
+        display: inline-flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 20px;
+        color: #061019;
+        font-weight: 800;
+        text-decoration: none;
+        cursor: pointer;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+        box-shadow: 0 14px 34px rgba(120, 240, 255, 0.22);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease,
+          opacity 0.2s ease;
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 46px rgba(120, 240, 255, 0.3);
+      }
+
+      .button.secondary {
+        color: var(--text);
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: none;
+      }
+
+      .button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .meta-card {
+        display: grid;
+        gap: 16px;
+        padding: 26px;
+      }
+
+      .metric {
+        padding: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.055);
+      }
+
+      .metric strong {
+        display: block;
+        margin-bottom: 8px;
+        color: #ffffff;
+        font-size: 30px;
+        letter-spacing: -0.04em;
+      }
+
+      .metric span {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .section {
+        margin-top: 30px;
+      }
+
+      .sticky-progress {
+        position: sticky;
+        top: 12px;
+        z-index: 5;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+        align-items: center;
+        margin: 30px 0 18px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        background: rgba(10, 14, 29, 0.84);
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.26);
+        backdrop-filter: blur(18px);
+      }
+
+      .progress-track {
+        height: 12px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .progress-bar {
+        width: 0%;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+        transition: width 0.25s ease;
+      }
+
+      .progress-copy {
+        min-width: 116px;
+        color: var(--soft);
+        font-weight: 700;
+        text-align: right;
+      }
+
+      .quiz {
+        display: grid;
+        gap: 16px;
+      }
+
+      .question {
+        padding: 22px;
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.065);
+        transition:
+          border-color 0.2s ease,
+          transform 0.2s ease,
+          background 0.2s ease;
+      }
+
+      .question:hover {
+        transform: translateY(-1px);
+        border-color: rgba(120, 240, 255, 0.34);
+        background: rgba(255, 255, 255, 0.085);
+      }
+
+      .question.missing {
+        border-color: rgba(255, 125, 156, 0.78);
+        box-shadow: 0 0 0 4px rgba(255, 125, 156, 0.08);
+      }
+
+      .question-top {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 14px;
+        align-items: start;
+      }
+
+      .question-number {
+        display: grid;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        color: #04131c;
+        font-size: 14px;
+        font-weight: 900;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+      }
+
+      .question-text {
+        margin: 2px 0 0;
+        color: #f7fbff;
+        font-size: 18px;
+        font-weight: 750;
+        line-height: 1.55;
+      }
+
+      .options {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .option {
+        position: relative;
+        min-height: 54px;
+        overflow: hidden;
+        color: var(--soft);
+        font-size: 14px;
+        font-weight: 760;
+        text-align: center;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.055);
+        transition:
+          color 0.2s ease,
+          border-color 0.2s ease,
+          background 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      .option input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .option span {
+        display: grid;
+        min-height: 54px;
+        padding: 8px;
+        place-items: center;
+      }
+
+      .option:hover {
+        transform: translateY(-1px);
+        border-color: rgba(120, 240, 255, 0.35);
+      }
+
+      .option:has(input:checked) {
+        color: #061019;
+        border-color: transparent;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+      }
+
+      .submit-panel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 22px;
+        padding: 24px;
+      }
+
+      .hint {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .hint.error {
+        color: var(--danger);
+      }
+
+      .result {
+        display: none;
+        gap: 22px;
+        margin-top: 30px;
+      }
+
+      .result.visible {
+        display: grid;
+      }
+
+      .result-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.68fr);
+        gap: 20px;
+        padding: 30px;
+      }
+
+      .badge {
+        display: inline-flex;
+        width: fit-content;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 16px;
+        padding: 8px 12px;
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 800;
+        border: 1px solid rgba(255, 207, 112, 0.28);
+        border-radius: 999px;
+        background: rgba(255, 207, 112, 0.08);
+      }
+
+      .result-title {
+        margin: 0;
+        font-size: clamp(34px, 6vw, 64px);
+        line-height: 1;
+        letter-spacing: -0.06em;
+      }
+
+      .result-copy {
+        max-width: 780px;
+        margin: 18px 0 0;
+        color: var(--soft);
+        font-size: 18px;
+        line-height: 1.8;
+      }
+
+      .score-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .score-item {
+        padding: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .score-item header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+        color: var(--soft);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .score-line {
+        position: relative;
+        height: 8px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(120, 240, 255, 0.62), rgba(255, 255, 255, 0.12), rgba(255, 207, 112, 0.68));
+      }
+
+      .score-dot {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 18px;
+        height: 18px;
+        border: 3px solid #07101b;
+        border-radius: 999px;
+        background: #ffffff;
+        box-shadow: 0 0 22px rgba(120, 240, 255, 0.54);
+        transform: translate(-50%, -50%);
+      }
+
+      .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .chart-card {
+        padding: 24px;
+      }
+
+      .chart-card h2,
+      .about-card h2 {
+        margin: 0 0 10px;
+        font-size: 22px;
+        letter-spacing: -0.03em;
+      }
+
+      .chart-card p,
+      .about-card p {
+        margin: 0 0 18px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        min-height: 360px;
+      }
+
+      .about-card {
+        padding: 26px;
+      }
+
+      .pill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .pill {
+        padding: 8px 12px;
+        color: var(--soft);
+        font-size: 13px;
+        font-weight: 760;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .footer {
+        margin-top: 34px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
+        text-align: center;
+      }
+
+      @media (max-width: 880px) {
+        .shell {
+          width: min(100% - 22px, 720px);
+          padding-top: 28px;
+        }
+
+        .hero,
+        .result-hero,
+        .chart-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-card {
+          padding: 30px 24px;
+        }
+
+        .options {
+          grid-template-columns: 1fr;
+        }
+
+        .option,
+        .option span {
+          min-height: 46px;
+        }
+
+        .sticky-progress {
+          grid-template-columns: 1fr;
+        }
+
+        .progress-copy {
+          min-width: 0;
+          text-align: left;
+        }
+
+        .question-text {
+          font-size: 16px;
+        }
+
+        .result-hero,
+        .chart-card,
+        .about-card {
+          padding: 22px;
+        }
+
+        canvas {
+          min-height: 310px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <div class="hero-card glass">
+          <p class="eyebrow">Local-only spectrum card</p>
+          <h1>
+            中文政治光谱
+            <span class="gradient-text">卡片测试</span>
+          </h1>
+          <p class="lead">
+            这是一份用于自我观察的轻量问卷。它不会判断“正确答案”，只把你对公共议题的直觉映射到五组光谱上，最后生成一张可读的倾向卡片。
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#quizSection">开始测试</a>
+            <a class="button secondary" href="#about">查看维度</a>
+          </div>
+        </div>
+
+        <aside class="meta-card glass" aria-label="测试信息">
+          <div class="metric">
+            <strong>35</strong>
+            <span>道陈述题，使用五档同意度作答。</span>
+          </div>
+          <div class="metric">
+            <strong>5</strong>
+            <span>组中文语境维度：经济、秩序、公平、文化与共同体。</span>
+          </div>
+          <div class="metric">
+            <strong>0</strong>
+            <span>后端、追踪与上传；所有计算只在浏览器中完成。</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="quizSection" aria-labelledby="quizTitle">
+        <div class="sticky-progress">
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="progress-copy" id="progressCopy">0 / 35 已回答</div>
+        </div>
+
+        <div class="hero-card glass">
+          <p class="eyebrow">No perfect answer</p>
+          <h2 id="quizTitle" class="result-title">选择你当下最接近的直觉</h2>
+          <p class="lead">
+            尽量不要揣摩“标准答案”。如果某题让你觉得“要看情况”，就选择中立或略微倾向的一边。
+          </p>
+        </div>
+
+        <form class="quiz" id="quizForm"></form>
+
+        <div class="submit-panel glass">
+          <p class="hint" id="submitHint">答完全部题目后，可以生成你的光谱卡片。</p>
+          <button class="button" id="submitButton" type="button" disabled>生成结果</button>
+        </div>
+      </section>
+
+      <section class="result" id="resultSection" aria-live="polite">
+        <div class="result-hero glass">
+          <div>
+            <span class="badge">你的光谱画像</span>
+            <h2 class="result-title gradient-text" id="resultTitle">中轴观察者</h2>
+            <p class="result-copy" id="resultCopy"></p>
+            <div class="hero-actions">
+              <button class="button" id="restartButton" type="button">重新测试</button>
+              <a class="button secondary" href="#quizSection">回看答案</a>
+            </div>
+          </div>
+          <div class="score-grid" id="scoreGrid"></div>
+        </div>
+
+        <div class="chart-grid">
+          <article class="chart-card glass">
+            <h2>五维光谱图</h2>
+            <p>中心代表中立，越靠近轴端代表该方向越鲜明。</p>
+            <canvas id="radarCanvas" aria-label="五维政治光谱图"></canvas>
+          </article>
+          <article class="chart-card glass">
+            <h2>经济 × 治理坐标</h2>
+            <p>横轴为国家调节到市场自主，纵轴为个体自由到公共秩序。</p>
+            <canvas id="compassCanvas" aria-label="经济与治理二维坐标图"></canvas>
+          </article>
+        </div>
+      </section>
+
+      <section class="section about-card glass" id="about">
+        <h2>这五组维度是什么意思？</h2>
+        <p>
+          本测试把复杂政治直觉压缩成五条连续轴，因此结果更像一张速写，而不是严肃诊断。相邻位置的人也可能在具体议题上差异很大。
+        </p>
+        <div class="pill-list" id="dimensionPills"></div>
+      </section>
+
+      <p class="footer">
+        说明：本页面仅用于娱乐和自我观察，不构成学术测量、政治建议或价值评判。页面不保存、不上传、不追踪你的答案。
+      </p>
+    </main>
+
+    <script>
+      const dimensions = [
+        {
+          id: "economy",
+          name: "经济组织",
+          negative: "国家调节",
+          positive: "市场自主",
+          negativeTrait: "公共保障",
+          positiveTrait: "市场自治",
+        },
+        {
+          id: "authority",
+          name: "治理偏好",
+          negative: "个体自由",
+          positive: "公共秩序",
+          negativeTrait: "自由优先",
+          positiveTrait: "秩序优先",
+        },
+        {
+          id: "justice",
+          name: "分配原则",
+          negative: "公平保障",
+          positive: "效率竞争",
+          negativeTrait: "平等敏感",
+          positiveTrait: "效率竞争",
+        },
+        {
+          id: "culture",
+          name: "文化变化",
+          negative: "进步开放",
+          positive: "传统延续",
+          negativeTrait: "开放进步",
+          positiveTrait: "传统延续",
+        },
+        {
+          id: "identity",
+          name: "共同体边界",
+          negative: "世界主义",
+          positive: "共同体优先",
+          negativeTrait: "世界主义",
+          positiveTrait: "共同体优先",
+        },
+      ];
+
+      const questions = [
+        { text: "公共服务应由政府承担更多责任，即使这意味着更高税负。", weights: { economy: -1.1, justice: -0.4 } },
+        { text: "市场竞争通常比行政分配更能推动创新和效率。", weights: { economy: 1.2, justice: 0.3 } },
+        { text: "能源、交通、金融等关键行业应保持较强公共控制。", weights: { economy: -1.1, authority: 0.2 } },
+        { text: "企业经营自由不应被过多监管束缚。", weights: { economy: 1.1, authority: -0.2 } },
+        { text: "缩小贫富差距比追求更高增长速度更重要。", weights: { economy: -0.4, justice: -1 } },
+        { text: "高福利可能削弱个人奋斗动力，需要谨慎扩张。", weights: { economy: 0.5, justice: 1 } },
+        { text: "住房、医疗、教育应首先被视为基本权利，而不是普通商品。", weights: { economy: -0.7, justice: -1.1 } },
+        { text: "为了公共安全，可以接受更严格的社会管理。", weights: { authority: 1.2 } },
+        { text: "个人生活方式只要不伤害他人，公共权力就不应干预。", weights: { authority: -1.2, culture: -0.3 } },
+        { text: "重大危机中，集中统一的决策比充分争论更重要。", weights: { authority: 1.1 } },
+        { text: "公共政策应尽可能保障少数意见表达，即使它们令人不适。", weights: { authority: -1.1, culture: -0.2 } },
+        { text: "匿名网络空间需要更严格的身份和内容管理。", weights: { authority: 1 } },
+        { text: "公民对公共机构保持怀疑，是健康社会的一部分。", weights: { authority: -0.9 } },
+        { text: "社会稳定应优先于激烈抗议带来的表达效果。", weights: { authority: 1 } },
+        { text: "收入差距只要来自合法竞争，就是可以接受的。", weights: { justice: 1.1, economy: 0.3 } },
+        { text: "再分配政策应更积极照顾弱势群体。", weights: { justice: -1.2, economy: -0.4 } },
+        { text: "教育资源应优先向落后地区和弱势家庭倾斜。", weights: { justice: -1.1 } },
+        { text: "奖励优秀者比平均分配更能推动社会进步。", weights: { justice: 1 } },
+        { text: "公共岗位和资源分配应更多考虑程序公平，而非结果平衡。", weights: { justice: 0.8 } },
+        { text: "基本收入或类似的兜底保障值得认真探索。", weights: { justice: -0.9, economy: -0.3 } },
+        { text: "过度强调公平会降低社会整体效率。", weights: { justice: 1.1 } },
+        { text: "传统家庭和社区规范仍应是社会的重要基础。", weights: { culture: 1.1 } },
+        { text: "性别、职业和生活方式的边界应更加开放。", weights: { culture: -1.1 } },
+        { text: "快速改变传统习俗容易制造社会撕裂。", weights: { culture: 1 } },
+        { text: "新技术和新观念带来的风险，不应成为拒绝变化的理由。", weights: { culture: -1 } },
+        { text: "学校教育应更重视共同价值、纪律和责任感。", weights: { culture: 0.8, authority: 0.3 } },
+        { text: "艺术和表达应允许冒犯主流审美。", weights: { culture: -0.9, authority: -0.2 } },
+        { text: "历史文化传承比追赶潮流更值得优先保护。", weights: { culture: 1 } },
+        { text: "国际合作应优先于零和竞争思维。", weights: { identity: -1.2 } },
+        { text: "本国劳动者和产业应优先得到政策保护。", weights: { identity: 1.1, economy: -0.2 } },
+        { text: "移民和跨文化交流总体上能丰富社会。", weights: { identity: -1.1, culture: -0.3 } },
+        { text: "全球规则如果损害本地利益，应当果断拒绝。", weights: { identity: 1 } },
+        { text: "气候、公共卫生等议题需要超越国界的治理。", weights: { identity: -1 } },
+        { text: "国家认同应比个人的全球身份更优先。", weights: { identity: 1.1 } },
+        { text: "保护本土文化不应以排斥外来文化为代价。", weights: { identity: -0.8, culture: -0.3 } },
+      ];
+
+      const choices = [
+        { label: "强烈不同意", value: -2 },
+        { label: "不同意", value: -1 },
+        { label: "中立", value: 0 },
+        { label: "同意", value: 1 },
+        { label: "强烈同意", value: 2 },
+      ];
+
+      const answers = Array(questions.length).fill(null);
+      let latestScores = null;
+
+      const quizForm = document.querySelector("#quizForm");
+      const progressBar = document.querySelector("#progressBar");
+      const progressCopy = document.querySelector("#progressCopy");
+      const submitButton = document.querySelector("#submitButton");
+      const submitHint = document.querySelector("#submitHint");
+      const resultSection = document.querySelector("#resultSection");
+      const resultTitle = document.querySelector("#resultTitle");
+      const resultCopy = document.querySelector("#resultCopy");
+      const scoreGrid = document.querySelector("#scoreGrid");
+      const dimensionPills = document.querySelector("#dimensionPills");
+      const radarCanvas = document.querySelector("#radarCanvas");
+      const compassCanvas = document.querySelector("#compassCanvas");
+
+      function renderQuiz() {
+        quizForm.innerHTML = questions
+          .map((question, index) => {
+            const options = choices
+              .map(
+                (choice) => `
+                  <label class="option">
+                    <input type="radio" name="q${index}" value="${choice.value}" aria-label="${choice.label}" />
+                    <span>${choice.label}</span>
+                  </label>
+                `
+              )
+              .join("");
+
+            return `
+              <article class="question" data-question="${index}">
+                <div class="question-top">
+                  <div class="question-number">${String(index + 1).padStart(2, "0")}</div>
+                  <p class="question-text">${question.text}</p>
+                </div>
+                <div class="options">${options}</div>
+              </article>
+            `;
+          })
+          .join("");
+      }
+
+      function renderDimensionPills() {
+        dimensionPills.innerHTML = dimensions
+          .map((dimension) => `<span class="pill">${dimension.name}：${dimension.negative} ↔ ${dimension.positive}</span>`)
+          .join("");
+      }
+
+      function updateProgress() {
+        const answered = answers.filter((answer) => answer !== null).length;
+        const percent = Math.round((answered / questions.length) * 100);
+        progressBar.style.width = `${percent}%`;
+        progressCopy.textContent = `${answered} / ${questions.length} 已回答`;
+        submitButton.disabled = answered !== questions.length;
+        submitHint.textContent =
+          answered === questions.length ? "已答完，可以生成你的光谱卡片。" : `还差 ${questions.length - answered} 题。`;
+        submitHint.classList.remove("error");
+      }
+
+      function calculateScores() {
+        const totals = Object.fromEntries(dimensions.map((dimension) => [dimension.id, 0]));
+        const maxes = Object.fromEntries(dimensions.map((dimension) => [dimension.id, 0]));
+
+        questions.forEach((question, index) => {
+          Object.entries(question.weights).forEach(([dimension, weight]) => {
+            totals[dimension] += answers[index] * weight;
+            maxes[dimension] += Math.abs(weight) * 2;
+          });
+        });
+
+        return Object.fromEntries(
+          dimensions.map((dimension) => {
+            const rawScore = maxes[dimension.id] === 0 ? 0 : (totals[dimension.id] / maxes[dimension.id]) * 100;
+            return [dimension.id, Math.round(Math.max(-100, Math.min(100, rawScore)))];
+          })
+        );
+      }
+
+      function describeScores(scores) {
+        const ranked = dimensions
+          .map((dimension) => ({
+            ...dimension,
+            score: scores[dimension.id],
+            strength: Math.abs(scores[dimension.id]),
+            trait: scores[dimension.id] >= 0 ? dimension.positiveTrait : dimension.negativeTrait,
+            pole: scores[dimension.id] >= 0 ? dimension.positive : dimension.negative,
+          }))
+          .sort((a, b) => b.strength - a.strength);
+
+        if (ranked[0].strength < 18) {
+          return {
+            title: "中轴调停者",
+            text: "你的答案整体靠近光谱中心，说明你更倾向按议题、情境和现实成本来判断，而不是被单一原则完全牵引。你的政治直觉可能比较重视平衡、可操作性和避免过度极化。",
+          };
+        }
+
+        const leading = ranked.filter((item) => item.strength >= 18).slice(0, 3);
+        const title = leading.slice(0, 2).map((item) => item.trait).join(" × ");
+        const emphasis = leading.map((item) => `${item.name}偏向「${item.pole}」`).join("、");
+        const moderation =
+          ranked[0].strength >= 62
+            ? "其中至少一个维度相当鲜明，说明你在相关议题上有比较稳定的优先级。"
+            : "这些倾向并不极端，更像是一组默认偏好，具体议题上仍可能保留弹性。";
+
+        return {
+          title,
+          text: `你的主要画像是「${title}」。从答案看，你的${emphasis}。${moderation}这不是政治身份标签，而是一张帮助你观察自己价值排序的速写。`,
+        };
+      }
+
+      function renderScores(scores) {
+        scoreGrid.innerHTML = dimensions
+          .map((dimension) => {
+            const score = scores[dimension.id];
+            const left = ((score + 100) / 200) * 100;
+
+            return `
+              <div class="score-item">
+                <header>
+                  <span>${dimension.negative}</span>
+                  <span>${dimension.name}</span>
+                  <span>${dimension.positive}</span>
+                </header>
+                <div class="score-line">
+                  <span class="score-dot" style="left:${left}%"></span>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      function setupCanvas(canvas) {
+        const rect = canvas.getBoundingClientRect();
+        const ratio = window.devicePixelRatio || 1;
+        const width = Math.max(320, Math.floor(rect.width));
+        const height = Math.max(300, Math.floor(rect.height || 360));
+        canvas.width = width * ratio;
+        canvas.height = height * ratio;
+        const context = canvas.getContext("2d");
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        context.clearRect(0, 0, width, height);
+        return { context, width, height };
+      }
+
+      function drawRadar(scores) {
+        const { context, width, height } = setupCanvas(radarCanvas);
+        const centerX = width / 2;
+        const centerY = height / 2 + 4;
+        const radius = Math.min(width, height) * 0.31;
+        const count = dimensions.length;
+
+        context.lineWidth = 1;
+        context.strokeStyle = "rgba(255,255,255,0.1)";
+        context.fillStyle = "rgba(255,255,255,0.04)";
+
+        for (let ring = 1; ring <= 4; ring += 1) {
+          context.beginPath();
+          context.arc(centerX, centerY, (radius * ring) / 4, 0, Math.PI * 2);
+          context.fill();
+          context.stroke();
+        }
+
+        dimensions.forEach((dimension, index) => {
+          const angle = -Math.PI / 2 + (index * Math.PI * 2) / count;
+          const dx = Math.cos(angle);
+          const dy = Math.sin(angle);
+
+          context.beginPath();
+          context.moveTo(centerX - dx * radius, centerY - dy * radius);
+          context.lineTo(centerX + dx * radius, centerY + dy * radius);
+          context.strokeStyle = "rgba(120,240,255,0.22)";
+          context.stroke();
+
+          context.fillStyle = "rgba(238,244,255,0.82)";
+          context.font = "700 12px Microsoft YaHei, sans-serif";
+          context.textAlign = dx > 0.25 ? "left" : dx < -0.25 ? "right" : "center";
+          context.textBaseline = dy > 0.25 ? "top" : dy < -0.25 ? "bottom" : "middle";
+          context.fillText(dimension.positive, centerX + dx * (radius + 18), centerY + dy * (radius + 18));
+          context.fillText(dimension.negative, centerX - dx * (radius + 18), centerY - dy * (radius + 18));
+        });
+
+        const points = dimensions.map((dimension, index) => {
+          const angle = -Math.PI / 2 + (index * Math.PI * 2) / count;
+          const score = scores[dimension.id] / 100;
+          return {
+            x: centerX + Math.cos(angle) * radius * score,
+            y: centerY + Math.sin(angle) * radius * score,
+          };
+        });
+
+        context.beginPath();
+        points.forEach((point, index) => {
+          if (index === 0) context.moveTo(point.x, point.y);
+          else context.lineTo(point.x, point.y);
+        });
+        context.closePath();
+        context.fillStyle = "rgba(120,240,255,0.26)";
+        context.strokeStyle = "rgba(120,240,255,0.92)";
+        context.lineWidth = 2.5;
+        context.fill();
+        context.stroke();
+
+        points.forEach((point) => {
+          context.beginPath();
+          context.arc(point.x, point.y, 5, 0, Math.PI * 2);
+          context.fillStyle = "#ffcf70";
+          context.fill();
+          context.lineWidth = 2;
+          context.strokeStyle = "#07101b";
+          context.stroke();
+        });
+      }
+
+      function drawCompass(scores) {
+        const { context, width, height } = setupCanvas(compassCanvas);
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const radius = Math.min(width, height) * 0.34;
+        const x = centerX + (scores.economy / 100) * radius;
+        const y = centerY - (scores.authority / 100) * radius;
+
+        context.strokeStyle = "rgba(255,255,255,0.11)";
+        context.lineWidth = 1;
+        for (let step = -2; step <= 2; step += 1) {
+          const offset = (radius * step) / 2;
+          context.beginPath();
+          context.moveTo(centerX - radius, centerY + offset);
+          context.lineTo(centerX + radius, centerY + offset);
+          context.stroke();
+          context.beginPath();
+          context.moveTo(centerX + offset, centerY - radius);
+          context.lineTo(centerX + offset, centerY + radius);
+          context.stroke();
+        }
+
+        context.strokeStyle = "rgba(120,240,255,0.55)";
+        context.lineWidth = 2;
+        context.beginPath();
+        context.moveTo(centerX - radius, centerY);
+        context.lineTo(centerX + radius, centerY);
+        context.moveTo(centerX, centerY - radius);
+        context.lineTo(centerX, centerY + radius);
+        context.stroke();
+
+        context.fillStyle = "rgba(238,244,255,0.88)";
+        context.font = "800 13px Microsoft YaHei, sans-serif";
+        context.textAlign = "center";
+        context.textBaseline = "bottom";
+        context.fillText("公共秩序", centerX, centerY - radius - 12);
+        context.textBaseline = "top";
+        context.fillText("个体自由", centerX, centerY + radius + 12);
+        context.textAlign = "right";
+        context.textBaseline = "middle";
+        context.fillText("国家调节", centerX - radius - 12, centerY);
+        context.textAlign = "left";
+        context.fillText("市场自主", centerX + radius + 12, centerY);
+
+        const gradient = context.createRadialGradient(x, y, 4, x, y, 34);
+        gradient.addColorStop(0, "rgba(255,207,112,1)");
+        gradient.addColorStop(1, "rgba(120,240,255,0)");
+        context.beginPath();
+        context.arc(x, y, 34, 0, Math.PI * 2);
+        context.fillStyle = gradient;
+        context.fill();
+
+        context.beginPath();
+        context.arc(x, y, 9, 0, Math.PI * 2);
+        context.fillStyle = "#ffcf70";
+        context.fill();
+        context.lineWidth = 3;
+        context.strokeStyle = "#07101b";
+        context.stroke();
+      }
+
+      function showResults() {
+        const firstMissing = answers.findIndex((answer) => answer === null);
+        document.querySelectorAll(".question").forEach((element) => element.classList.remove("missing"));
+
+        if (firstMissing !== -1) {
+          const missingElement = document.querySelector(`[data-question="${firstMissing}"]`);
+          missingElement.classList.add("missing");
+          missingElement.scrollIntoView({ behavior: "smooth", block: "center" });
+          submitHint.textContent = "还有题目没有回答，先补完再生成结果。";
+          submitHint.classList.add("error");
+          return;
+        }
+
+        latestScores = calculateScores();
+        const description = describeScores(latestScores);
+        resultTitle.textContent = description.title;
+        resultCopy.textContent = description.text;
+        renderScores(latestScores);
+        resultSection.classList.add("visible");
+        requestAnimationFrame(() => {
+          drawRadar(latestScores);
+          drawCompass(latestScores);
+          resultSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+
+      function restart() {
+        answers.fill(null);
+        quizForm.reset();
+        latestScores = null;
+        resultSection.classList.remove("visible");
+        document.querySelectorAll(".question").forEach((element) => element.classList.remove("missing"));
+        updateProgress();
+        document.querySelector("#quizSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      quizForm.addEventListener("change", (event) => {
+        if (!event.target.matches("input[type='radio']")) return;
+        const index = Number(event.target.name.replace("q", ""));
+        answers[index] = Number(event.target.value);
+        const question = document.querySelector(`[data-question="${index}"]`);
+        question.classList.remove("missing");
+        updateProgress();
+      });
+
+      submitButton.addEventListener("click", showResults);
+      document.querySelector("#restartButton").addEventListener("click", restart);
+      window.addEventListener("resize", () => {
+        if (!latestScores) return;
+        drawRadar(latestScores);
+        drawCompass(latestScores);
+      });
+
+      renderQuiz();
+      renderDimensionPills();
+      updateProgress();
+    </script>
+  </body>
+</html>
