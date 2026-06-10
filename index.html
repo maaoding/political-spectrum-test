@@ -8,6 +8,7 @@
       content="一个本地计算、无数据上传的中文政治光谱卡片测试，包含五组维度介绍与常见意识形态百科。"
     />
     <title>中文政治光谱卡片测试</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png?v=1" />
     <style>
       :root {
         color-scheme: dark;
@@ -110,13 +111,21 @@
 
       .brand-mark {
         display: grid;
-        width: 38px;
-        height: 38px;
+        width: 42px;
+        height: 42px;
         place-items: center;
-        color: #061019;
         border-radius: 14px;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
+        background:
+          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.16), transparent 56%),
+          rgba(255, 255, 255, 0.07);
         box-shadow: 0 12px 34px rgba(120, 240, 255, 0.2);
+      }
+
+      .brand-mark img {
+        display: block;
+        width: 34px;
+        height: 34px;
+        object-fit: contain;
       }
 
       .nav {
@@ -430,29 +439,38 @@
 
       .text-list {
         display: grid;
-        gap: 8px;
+        gap: 9px;
         padding: 0;
-        margin: 14px 0 0;
+        margin: 10px 0 0;
         list-style: none;
       }
 
       .text-list li {
         position: relative;
-        padding-left: 18px;
+        padding-left: 14px;
         color: var(--muted);
         line-height: 1.65;
       }
 
       .text-list li::before {
         position: absolute;
-        top: 0.72em;
-        left: 0;
-        width: 7px;
-        height: 7px;
+        top: 0.82em;
+        left: 2px;
+        width: 4px;
+        height: 4px;
         content: "";
         border-radius: 999px;
         background: var(--primary);
         transform: translateY(-50%);
+      }
+
+      .list-label {
+        margin: 18px 0 0;
+        color: var(--accent);
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
       }
 
       .sticky-progress {
@@ -820,7 +838,7 @@
     <header class="topbar">
       <div class="topbar-inner">
         <a class="brand" href="#home" data-route="home" aria-label="返回首页">
-          <span class="brand-mark">谱</span>
+          <span class="brand-mark" aria-hidden="true"><img src="assets/logo.png?v=1" alt="" /></span>
           <span>中文政治光谱</span>
         </a>
         <nav class="nav" aria-label="主导航">
@@ -1311,6 +1329,7 @@
                 <h3>${ideology.name}</h3>
                 <p>${ideology.summary}</p>
                 <p class="section-space"><strong>核心关切：</strong>${ideology.core}</p>
+                <h4 class="list-label">常见政策偏好</h4>
                 <ul class="text-list">
                   ${ideology.policies.map((policy) => `<li>${policy}</li>`).join("")}
                 </ul>
