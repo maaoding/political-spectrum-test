@@ -1218,24 +1218,63 @@
       }
 
       .ideology-guide,
-      .result-reading {
+      .result-reading,
+      .subsite-map {
         padding: 24px 0;
         border-bottom: 1px solid var(--line);
       }
 
       .ideology-guide h3,
-      .result-reading h3 {
+      .result-reading h3,
+      .subsite-map h2 {
         margin: 0 0 8px;
         font-size: 18px;
         letter-spacing: 0;
       }
 
       .ideology-guide p,
-      .result-reading p {
+      .result-reading p,
+      .subsite-map p {
         max-width: 760px;
         margin: 0;
         color: var(--muted);
         line-height: 1.7;
+      }
+
+      .module-list {
+        display: grid;
+        gap: 0;
+        margin-top: 20px;
+        border-top: 1px solid var(--line);
+      }
+
+      .module-row {
+        display: grid;
+        grid-template-columns: 96px minmax(0, 1fr) minmax(180px, 0.34fr);
+        gap: 18px;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .module-index {
+        color: var(--primary);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .module-row h3 {
+        margin: 0 0 8px;
+        font-size: 17px;
+        letter-spacing: 0;
+      }
+
+      .module-row p {
+        max-width: none;
+      }
+
+      .module-row .link-row {
+        align-content: start;
+        margin-top: 0;
       }
 
       .quick-nav,
@@ -1917,8 +1956,17 @@
         .stat-strip,
         .result-summary,
         .chart-grid,
-        .note-item {
+        .note-item,
+        .module-row {
           grid-template-columns: 1fr;
+        }
+
+        .module-row {
+          gap: 8px;
+        }
+
+        .module-row .link-row {
+          margin-top: 4px;
         }
 
         .metric,
@@ -2100,6 +2148,15 @@
             <p>测试答案只在当前浏览器中计算，不保存、不上传、不统计；刷新页面会清空未提交结果。</p>
           </article>
         </div>
+
+        <section class="subsite-map section-space" aria-labelledby="subsiteMapTitle">
+          <p class="eyebrow">Subsite structure</p>
+          <h2 id="subsiteMapTitle">作为政治科普网站子版块，可以这样使用</h2>
+          <p>
+            这个页面适合作为主站里的互动入口：测试负责引发兴趣，维度负责解释判断框架，议题负责连接现实问题，词条和方法说明负责沉淀可继续阅读的知识层。
+          </p>
+          <div class="module-list" id="moduleGrid"></div>
+        </section>
       </section>
 
       <section class="page" id="guide" data-page="guide" aria-labelledby="guideTitle">
@@ -2530,6 +2587,7 @@
       const submitButton = document.querySelector("#submitButton");
       const submitHint = document.querySelector("#submitHint");
       const questionIndex = document.querySelector("#questionIndex");
+      const moduleGrid = document.querySelector("#moduleGrid");
       const guideGrid = document.querySelector("#guideGrid");
       const resultContent = document.querySelector("#resultContent");
       const emptyResult = document.querySelector("#emptyResult");
@@ -2586,6 +2644,41 @@
         anarchism: ["libertarianism", "progressivism", "marxism"],
         authoritarianism: ["conservatism", "nationalism", "communitarianism"],
       };
+
+      const siteModules = [
+        {
+          title: "互动入口",
+          summary: "用 40 道题让访客先形成一张自己的价值速写，降低第一次进入政治概念讨论的门槛。",
+          links: [
+            { label: "做光谱测试", route: "quiz" },
+            { label: "查看结果", route: "result" },
+          ],
+        },
+        {
+          title: "解释框架",
+          summary: "用五组维度解释结果背后的价值取舍，让访客知道自己是在什么轴线上做判断。",
+          links: [
+            { label: "五组维度", route: "dimensions" },
+            { label: "方法说明", route: "method" },
+          ],
+        },
+        {
+          title: "现实议题",
+          summary: "把抽象维度落到住房、医疗、教育、平台治理等问题上，适合作为主站专题文章的入口。",
+          links: [
+            { label: "议题地图", route: "issues" },
+            { label: "导读推荐", route: "guide" },
+          ],
+        },
+        {
+          title: "概念词库",
+          summary: "用词条、相邻概念和概念对照沉淀长期内容，避免测试结果被误读成简单身份标签。",
+          links: [
+            { label: "词条百科", route: "ideologies" },
+            { label: "概念对照", route: "comparisons" },
+          ],
+        },
+      ];
 
       const readingGuides = [
         {
@@ -2888,6 +2981,10 @@
         return issues.find((issue) => issue.id === id);
       }
 
+      function getIssuesByIdeologyId(id) {
+        return issues.filter((issue) => issue.relatedIdeologies.includes(id));
+      }
+
       function scrollToIdeology(id) {
         const target = document.querySelector(`#ideology-${id}`);
         if (!target) return;
@@ -2985,6 +3082,25 @@
           .join("");
       }
 
+      function renderModules() {
+        moduleGrid.innerHTML = siteModules
+          .map(
+            (module, index) => `
+              <article class="module-row">
+                <span class="module-index">${String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3>${module.title}</h3>
+                  <p>${module.summary}</p>
+                </div>
+                <div class="link-row">
+                  ${module.links.map((link) => `<a href="#${link.route}" data-route-link="${link.route}">${link.label}</a>`).join("")}
+                </div>
+              </article>
+            `
+          )
+          .join("");
+      }
+
       function renderGuides() {
         guideGrid.innerHTML = readingGuides
           .map(
@@ -3059,6 +3175,7 @@
                     .join("")}
                 </div>
                 <p class="section-space"><strong>关键追问：</strong>${issue.questions.join("；")}。</p>
+                <p class="section-space"><strong>专题写法：</strong>可以先用一个现实场景切入，再把争议拆成「${issue.axes.join(" / ")}」几条线，最后回到制度边界、成本分配和可能的副作用。</p>
                 <div class="link-row" aria-label="${issue.title}相关词条">
                   ${issue.relatedIdeologies
                     .map(getIdeologyById)
@@ -3085,6 +3202,7 @@
           .map(
             (ideology) => {
               const related = getRelatedIdeologies(ideology.id);
+              const relatedIssues = getIssuesByIdeologyId(ideology.id);
 
               return `
                 <article class="info-block" id="ideology-${ideology.id}" tabindex="-1">
@@ -3112,6 +3230,16 @@
                         )
                         .join("")}
                     </div>
+                    ${relatedIssues.length
+                      ? `
+                        <span class="adjacent-label">相关议题</span>
+                        <div class="reading-links">
+                          ${relatedIssues
+                            .map((issue) => `<a href="#issues" data-issue-link="${issue.id}">${issue.title}</a>`)
+                            .join("")}
+                        </div>
+                      `
+                      : ""}
                   </div>
                 </article>
               `;
@@ -3358,6 +3486,11 @@
             ${matchedIssues
               .map((issue) => `<a href="#issues" data-issue-link="${issue.id}">${issue.title}</a>`)
               .join("")}
+          </div>
+          <span class="adjacent-label">推荐路径</span>
+          <div class="reading-links">
+            <a href="#guide" data-route-link="guide">按导读继续阅读</a>
+            <a href="#comparisons" data-route-link="comparisons">看概念对照</a>
           </div>
         `;
       }
@@ -3708,6 +3841,7 @@
 
       renderQuiz();
       renderQuestionIndex();
+      renderModules();
       renderGuides();
       renderDimensions();
       renderIssues();
